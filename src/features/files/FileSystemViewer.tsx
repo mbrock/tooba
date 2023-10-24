@@ -1,49 +1,55 @@
 import React, { useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { GroupedFolder, fetchFileSystem } from "./fileSystemSlice"
+import { GroupedFolder, fetchFileSystem, fileSystemState } from "./fileSystem"
+import {
+  useRecoilCallback,
+  useRecoilValue,
+  useRecoilValueLoadable,
+} from "recoil"
 import FileGroupView from "./FileGroupView"
+import { TileGroup } from "../mosaic/Mosaic"
 
 function renderFolder(folder: GroupedFolder, level = 0) {
   return (
     <div>
-      <div className="flex flex-col gap-8 ml-4">
+      <div className="flex flex-col gap-4">
         {folder.folders.map((sub) => (
           <div key={sub.name}>{renderFolder(sub, level + 1)}</div>
         ))}
       </div>
       {folder.files.length > 0 && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <TileGroup>
           {folder.files.map((file) => (
-            <div key={file.baseName}>
-              <FileGroupView fileGroup={file} />
-            </div>
+            <FileGroupView key={file.baseName} fileGroup={file} />
           ))}
-        </div>
+        </TileGroup>
       )}
     </div>
   )
 }
 
 export const FileSystemViewer = () => {
-  const dispatch = useAppDispatch()
-  const fileSystem = useAppSelector((state) => state.fileSystem)
+  const fileSystem = useRecoilValue(fileSystemState)
 
-  useEffect(() => {
-    dispatch(fetchFileSystem())
-  }, [dispatch])
+  const handleOpenFolder = useRecoilCallback(
+    ({ snapshot, set }) =>
+      async () => {
+        const fileSystem = await snapshot.getPromise(fetchFileSystem)
+        set(fileSystemState, fileSystem)
+      },
+  )
 
   return (
-    <div>
-      {!fileSystem.folder ? (
+    <>
+      {!fileSystem ? (
         <button
           className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-          onClick={() => dispatch(fetchFileSystem())}
+          onClick={handleOpenFolder}
         >
           📂 Open Folder
         </button>
       ) : (
-        <>{renderFolder(fileSystem.folder)}</>
+        <>{renderFolder(fileSystem)}</>
       )}
-    </div>
+    </>
   )
 }

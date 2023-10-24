@@ -1,14 +1,13 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import { Provider } from "react-redux"
-import { store } from "./app/store"
 import App from "./App"
 import "./index.css"
+import { RecoilRoot } from "recoil"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <RecoilRoot>
       <App />
-    </Provider>
+    </RecoilRoot>
   </React.StrictMode>,
 )

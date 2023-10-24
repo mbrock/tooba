@@ -9,7 +9,7 @@ export interface Folder {
 // Function to scan directory and populate structure
 async function scanDirectory(dirHandle: FileSystemDirectoryHandle): Promise<Folder> {
   const folder: Folder = { name: dirHandle.name, files: [], folders: [] };
-  const entries = await dirHandle.values();
+  const entries = await (dirHandle as any).values(); // FIXME
   for await (const entry of entries) {
     if (entry.kind === 'file') {
       folder.files.push(entry);

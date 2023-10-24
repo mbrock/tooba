@@ -1,8 +1,11 @@
 import React, { useState } from "react"
-import { FileGroup } from "./fileSystemSlice"
-import { useObjectUrl } from "../../app/hooks"
-import { useAppDispatch } from "../../app/hooks"
-import { setVideoUrl } from "../video/videoSlice"
+
+import { useObjectUrl } from "../../hooks"
+
+import { FileGroup } from "./fileSystem"
+import { videoUrlState } from "../video/VideoPlayer"
+import { useRecoilState } from "recoil"
+import { Tile } from "../mosaic/Mosaic"
 
 interface FileGroupRendererProps {
   fileGroup: FileGroup
@@ -15,37 +18,44 @@ const FileGroupView: React.FC<FileGroupRendererProps> = ({ fileGroup }) => {
   const hasTBN = files.hasOwnProperty("tbn")
 
   if (hasMP4 && hasTBN) {
-    return <VideoFileGroupView mp4File={files["mp4"]} tbnFile={files["tbn"]} />
+    return (
+      <VideoFileGroupView
+        videoFile={files["mp4"]}
+        thumbnailFile={files["tbn"]}
+      />
+    )
   }
 
   return <div>Unknown file group</div>
 }
 
 interface VideoFileGroupProps {
-  mp4File: FileSystemFileHandle
-  tbnFile: FileSystemFileHandle
+  videoFile: FileSystemFileHandle
+  thumbnailFile: FileSystemFileHandle
 }
 
 const VideoFileGroupView: React.FC<VideoFileGroupProps> = ({
-  mp4File,
-  tbnFile,
+  videoFile: mp4File,
+  thumbnailFile: tbnFile,
 }) => {
-  const tbnObjectUrl = useObjectUrl(tbnFile)
-  const [mp4ObjectUrl, setMp4ObjectUrl] = useState<string | null>(null)
-  const dispatch = useAppDispatch()
+  const thumbnailUrl = useObjectUrl(tbnFile)
+  const [videoObjectUrl, setMp4ObjectUrl] = useState<string | null>(null)
+  const [, setVideoUrl] = useRecoilState(videoUrlState)
 
   const handleClick = async () => {
-    if (!mp4ObjectUrl) {
+    if (!videoObjectUrl) {
       const url = URL.createObjectURL(await mp4File.getFile())
       setMp4ObjectUrl(url)
-      dispatch(setVideoUrl(url))
+      setVideoUrl(url)
     }
   }
 
   return (
-    <button onClick={handleClick}>
-      {tbnObjectUrl && <img src={tbnObjectUrl} className="inline-block" />}
-    </button>
+    <Tile onClick={handleClick}>
+      {thumbnailUrl && (
+        <img src={thumbnailUrl} className="inline-block rounded-lg w-96" />
+      )}
+    </Tile>
   )
 }
 

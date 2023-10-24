@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { atom, selector } from 'recoil';
 import { Folder, loadFileSystem } from './directoryScanner';
 
 export interface FileGroup {
@@ -37,31 +37,15 @@ function groupFolder(folder: Folder): GroupedFolder {
   };
 }
 
-export const fetchFileSystem = createAsyncThunk(
-  'fileSystem/fetchFileSystem',
-  async () => {
-    return await loadFileSystem();
-  }
-);
-
-interface FileSystemState {
-  folder: GroupedFolder | null;
-}
-
-const initialState: FileSystemState = {
-  folder: null,
-};
-
-export const fileSystemSlice = createSlice({
-  name: 'fileSystem',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(fetchFileSystem.fulfilled, (state, action) => {
-      console.log('action', action);
-      state.folder = groupFolder(action.payload);
-    });
-  },
+export const fileSystemState = atom({
+  key: 'fileSystemState',
+  default: null as GroupedFolder | null,
 });
 
-export default fileSystemSlice.reducer;
+export const fetchFileSystem = selector({
+  key: 'fetchFileSystem',
+  get: async () => {
+    const folder = await loadFileSystem();
+    return groupFolder(folder);
+  },
+});
