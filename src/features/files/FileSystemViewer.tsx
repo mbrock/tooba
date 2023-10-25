@@ -11,7 +11,15 @@ import { TileGroup } from "../mosaic/Mosaic"
 function renderFolder(folder: GroupedFolder, level = 0) {
   return (
     <div>
-      <div className="flex flex-col gap-4">
+      {level > 0 && (
+        <header className="flex flex-row items-center gap-4 mb-1 ml-4">
+          <h1 className="font-mono text-2xl font-bold text-gray-300 uppercase">
+            {folder.name.replace(/\./g, " ")}
+          </h1>
+          <span className="text-lg text-gray-500">{folder.files.length}</span>
+        </header>
+      )}
+      <div className="flex flex-col gap-6">
         {folder.folders.map((sub) => (
           <div key={sub.name}>{renderFolder(sub, level + 1)}</div>
         ))}
