@@ -1,4 +1,4 @@
-import tuesdayImgUrl from "./img/Beet and Black Bean Burgers with Cabbage Slaw.png"
+import tuesdayImgUrl from "./img/Lentil Pasta with Pesto and Roasted Brussels Sprouts.png"
 import wednesdayImgUrl from "./img/Pumpkin and Chickpea Curry + Quinoa Side.png"
 import thursdayImgUrl from "./img/Quinoa Salad with Hazelnuts, Balsamic Vinegar, and Grilled Chicken.png"
 import fridayImgUrl from "./img/Beet and Black Bean Burgers with Cabbage Slaw.png"
