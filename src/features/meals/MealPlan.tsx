@@ -21,8 +21,13 @@ type MealProps = {
 const Meal = ({ meal, today }: MealProps) => {
   return (
     <Tile key={meal.Day} onClick={() => console.log("clicked")}>
-      <div className="flex flex-col w-80">
-        <img src={meal.Image} className={`w-full h-auto rounded-md`} />
+      <div className={`flex flex-col w-80`}>
+        <img
+          src={meal.Image}
+          className={`w-full h-auto rounded-md ${
+            today ? "border-8 border-yellow-500" : ""
+          }`}
+        />
         <div className="px-2 py-1 uppercase">
           <span className="text-xs text-gray-300">{meal.Day}</span>{" "}
           <h2 className="text-sm">
@@ -49,7 +54,7 @@ const Meal = ({ meal, today }: MealProps) => {
 }
 
 export const MealPlan = () => {
-  const today = "Tuesday"
+  const today = "Onsdag"
   return (
     <TileGroup>
       {mealPlan.map((meal: Meal) => (
