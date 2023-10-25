@@ -46,6 +46,8 @@ export const GamepadListener: React.FC<GamepadListenerProps> = ({
 interface ButtonCallbacks {
   A: (el: HTMLElement) => void
   B: (el: HTMLElement) => void
+  LB: (el: HTMLElement) => void
+  RB: (el: HTMLElement) => void
 }
 
 interface GamepadModuleConfig {
@@ -184,6 +186,8 @@ export const gamepadNavigationHandler = (
   const buttonMap: ButtonMap = {
     0: "A",
     1: "B",
+    5: "LB",
+    6: "RB",
     12: "Up",
     13: "Down",
     14: "Left",

@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil"
 
 import { FileSystemViewer } from "./features/files/FileSystemViewer"
-import { VideoPlayer, videoUrlState } from "./features/video/VideoPlayer"
+import { VideoPlayer, seek, videoUrlState } from "./features/video/VideoPlayer"
 import { MealPlan } from "./features/meals/MealPlan"
 import { GamepadListener, gamepadNavigationHandler } from "./gamepad"
 
@@ -15,6 +15,8 @@ function App() {
     {
       A: (el) => el.click(),
       B: () => setVideoUrl(null),
+      LB: () => seek(-10),
+      RB: () => seek(10),
     },
   )
 

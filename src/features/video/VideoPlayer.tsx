@@ -6,6 +6,13 @@ export const videoUrlState = atom<string | null>({
   default: null,
 })
 
+export function seek(seconds: number) {
+  const video = document.querySelector("video")
+  if (video) {
+    video.currentTime += seconds
+  }
+}
+
 export function VideoPlayer({ videoUrl }: { videoUrl: string }) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
