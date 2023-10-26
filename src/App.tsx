@@ -30,7 +30,7 @@ function App() {
 
   return (
     <>
-      <nav className="flex flex-col flex-grow gap-8 overflow-y-auto">
+      <nav className="flex flex-col flex-grow gap-8 mb-8 overflow-y-auto">
         <MealPlan />
         <FileSystemViewer />
         <TileGroup>

@@ -132,7 +132,11 @@ export const SpeechRecognitionDisplay: React.FC = () => {
     // scroll the last line into view
     const lastLine = document.querySelector(".last-line")
     if (lastLine) {
-      lastLine.scrollIntoView({ behavior: "smooth" })
+      lastLine.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "end",
+      })
       // find its nearest parent with tabindex=0 and focus it
       const focusableParent = lastLine.closest(
         "[tabindex='0']",
@@ -150,12 +154,16 @@ export const SpeechRecognitionDisplay: React.FC = () => {
   return (
     <>
       {history.slice(0, -1).map((line, index) => (
-        <LineView key={index} line={line} className={"text-gray-400"} />
+        <LineView
+          key={index}
+          line={line}
+          className={"text-gray-400 dark:text-gray-500"}
+        />
       ))}
       <LineView
         key={lastIndex}
         line={{ text, final: false, certainty: 0 }}
-        className="text-gray-600 last-line"
+        className="text-gray-600 last-line dark:text-gray-300"
       />
     </>
   )
