@@ -133,6 +133,13 @@ export const SpeechRecognitionDisplay: React.FC = () => {
     const lastLine = document.querySelector(".last-line")
     if (lastLine) {
       lastLine.scrollIntoView({ behavior: "smooth" })
+      // find its nearest parent with tabindex=0 and focus it
+      const focusableParent = lastLine.closest(
+        "[tabindex='0']",
+      ) as HTMLElement | null
+      if (focusableParent) {
+        focusableParent.focus()
+      }
     }
   }, [history, text])
 
