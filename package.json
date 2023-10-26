@@ -15,12 +15,14 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
+    "@types/dom-speech-recognition": "^0.0.3",
     "@types/wicg-file-system-access": "^2023.10.2",
     "idb-keyval": "^6.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.1",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.2.0",

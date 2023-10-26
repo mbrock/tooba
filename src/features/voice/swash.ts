@@ -229,10 +229,10 @@ function speechRecognitionEventStream({ language = "en-US" }) {
 }
 
 class AudioRecorder {
-  mediaRecorder: null
-  chunks: never[]
-  stream: null
-  startTime: null
+  mediaRecorder: MediaRecorder | null
+  chunks: any[]
+  stream: MediaStream | null
+  startTime: number | null
   constructor() {
     this.mediaRecorder = null
     this.chunks = []
@@ -253,6 +253,11 @@ class AudioRecorder {
 
   async start() {
     await this.setup()
+
+    if (this.mediaRecorder === null) {
+      throw new Error("mediaRecorder is null")
+    }
+
     if (this.mediaRecorder.state === "inactive") {
       this.mediaRecorder.start(100)
       this.startTime = Date.now()
@@ -266,6 +271,10 @@ class AudioRecorder {
 
   stop() {
     return new Promise((resolve) => {
+      if (this.mediaRecorder === null) {
+        throw new Error("mediaRecorder is null")
+      }
+
       this.mediaRecorder.onstop = () => {
         const blob = this.dump()
         this.chunks = []
@@ -284,7 +293,17 @@ class AudioRecorder {
   }
 }
 
-async function transcribe({ file, token, language = "en", prompt = "" }) {
+async function transcribe({
+  file,
+  token,
+  language,
+  prompt,
+}: {
+  file: Blob
+  token: string
+  language?: string
+  prompt?: string
+}) {
   const formData = new FormData()
   formData.append("file", file, "audio.webm")
   formData.append("model", "whisper-1")
@@ -311,9 +330,12 @@ async function transcribe({ file, token, language = "en", prompt = "" }) {
   return await response.json()
 }
 
-async function demand({ key, message = key }) {
+async function demand({ key, message }: { key: string; message: string }) {
   return new Promise((resolve) => {
     const x = localStorage.getItem(key) || prompt(message)
+    if (!x) {
+      throw new Error("No value provided")
+    }
     localStorage.setItem(key, x)
     resolve(x)
   })
@@ -322,7 +344,7 @@ async function demand({ key, message = key }) {
 class ResettableTimer {
   timeoutDuration: number
   onTimeout: () => Promise<void>
-  timeoutId: null
+  timeoutId: any
   constructor(timeoutDuration: number, onTimeout: () => Promise<void>) {
     this.timeoutDuration = timeoutDuration
     this.onTimeout = onTimeout
@@ -334,7 +356,9 @@ class ResettableTimer {
   }
 
   reset() {
-    clearTimeout(this.timeoutId)
+    if (this.timeoutId !== null) {
+      clearTimeout(this.timeoutId)
+    }
     this.timeoutId = setTimeout(this.onTimeout, this.timeoutDuration)
   }
 
@@ -345,11 +369,11 @@ class ResettableTimer {
 }
 
 class SwashDictaphone extends BaseComponent {
-  db: string | null
-  shortLanguage: string
-  recognitionEventStream: Stream
-  recorder: AudioRecorder
-  timer: ResettableTimer
+  db: string | null = null
+  shortLanguage: string | null = null
+  recognitionEventStream: Stream<any> | null = null
+  recorder: AudioRecorder | null = null
+  timer: ResettableTimer | null = null
   constructor() {
     super(`
       <link rel="stylesheet" href="index.css">

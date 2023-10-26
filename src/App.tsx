@@ -4,20 +4,26 @@ import { FileSystemViewer } from "./features/files/FileSystemViewer"
 import { VideoPlayer, seek, videoUrlState } from "./features/video/VideoPlayer"
 import { MealPlan } from "./features/meals/MealPlan"
 import { GamepadListener, gamepadNavigationHandler } from "./gamepad"
+import { Dictaphone } from "./features/voice/Voice"
+import UserInteractionInitializer from "./features/UserInteractionInitializer"
+import { useCallback } from "react"
 
 function App() {
   const [videoUrl, setVideoUrl] = useRecoilState(videoUrlState)
-  const onButtonPress = gamepadNavigationHandler(
-    {
-      rowSelector: ".overflow-x-auto",
-      targetSelector: "a",
-    },
-    {
-      A: (el) => el.click(),
-      B: () => setVideoUrl(null),
-      LB: () => seek(-10),
-      RB: () => seek(10),
-    },
+  const onButtonPress = useCallback(
+    gamepadNavigationHandler(
+      {
+        rowSelector: ".overflow-x-auto",
+        targetSelector: "a",
+      },
+      {
+        A: (el) => el.click(),
+        B: () => setVideoUrl(null),
+        LB: () => seek(-10),
+        RB: () => seek(10),
+      },
+    ),
+    [setVideoUrl],
   )
 
   return (
@@ -28,6 +34,9 @@ function App() {
       </nav>
       {videoUrl && <VideoPlayer key={videoUrl} videoUrl={videoUrl} />}
       <GamepadListener onButtonPress={onButtonPress} />
+      <UserInteractionInitializer initButtonLabel="🎤 Click to Start">
+        <Dictaphone />
+      </UserInteractionInitializer>
     </>
   )
 }
