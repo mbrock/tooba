@@ -167,10 +167,10 @@ const VideoFileGroupView: React.FC<VideoFileGroupProps> = ({
             data={nfoData?.title}
             render={(text) => <h3 className="mt-1 font-bold">{text}</h3>}
           />
-          <OptionalField
+          {/* <OptionalField
             data={nfoData?.plot}
             render={(text) => <p>{text}</p>}
-          />
+          /> */}
           <OptionalField
             data={nfoData?.aired}
             render={(text) => <DateView date={text} />}
