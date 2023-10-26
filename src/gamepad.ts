@@ -213,7 +213,11 @@ export const gamepadNavigationHandler = (
       navigate(action as ArrowButton, config, focusedElement)
     } else {
       if (focusedElement) {
-        buttonCallbacks[action as keyof ButtonCallbacks](focusedElement)
+        //buttonCallbacks[action as keyof ButtonCallbacks](focusedElement)
+        const callback = buttonCallbacks[action as keyof ButtonCallbacks]
+        if (callback) {
+          callback(focusedElement)
+        }
       }
     }
   }
