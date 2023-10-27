@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
-
 # Loop through all MP4 files recursively
-for input_file in $(find . -type f -name "*.mp4"); do
-  temp_file="${input_file}.tmp"
+for input_file in $(find . -type f -name '*.mp4'); do
+  echo "$input_file"
+  temp_file="${input_file}.tmp.mp4"
 
   # Check if audio is AAC
   audio_check=$(ffmpeg -i "$input_file" 2>&1 | grep "Audio: aac")

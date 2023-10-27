@@ -10,6 +10,7 @@ import { SpeechRecognitionDisplay } from "./features/voice/SpeechRecognitionDisp
 import { Tile, TileGroup } from "./features/mosaic/Mosaic"
 import Polygon from "./features/Polygon"
 import PanelLayout from "./features/plywood"
+import StopMotionCreator from "./features/stopmo"
 
 const Plywood: React.FC = () => {
   const panel: [number, number] = [1250, 2500]
@@ -73,6 +74,7 @@ function App() {
             </Tile>
           ))}
         </TileGroup>
+        <StopMotionCreator />
         <FileSystemViewer />
       </nav>
       {videoUrl && (

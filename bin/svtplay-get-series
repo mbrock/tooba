@@ -1,3 +1,25 @@
 #!/usr/bin/env bash
-svtplay-dl -A -S -t --nfo --subfolder "$@"
-./ensure-codecs
+# usage: svtplay-get-series [--since-yesterday] <url>
+
+# parse options
+since_yesterday=false
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --since-yesterday)
+      since_yesterday=true
+      ;;
+    *)
+      break
+      ;;
+  esac
+  shift
+done
+cmd=(svtplay-dl -A -S -t --nfo --subfolder)
+if $since_yesterday; then
+  yesterday_date=$(date -d yesterday +%Y-%m-%d)
+  cmd+=(--after-date "$yesterday_date")
+fi
+cmd+=("$@")
+"${cmd[@]}"
+scriptdir="$(dirname "$0")"
+"$scriptdir"/ensure-codecs "$@"
