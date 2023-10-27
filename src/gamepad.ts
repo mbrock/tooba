@@ -186,8 +186,8 @@ export const gamepadNavigationHandler = (
   const buttonMap: ButtonMap = {
     0: "A",
     1: "B",
-    5: "LB",
-    6: "RB",
+    4: "LB",
+    5: "RB",
     12: "Up",
     13: "Down",
     14: "Left",
