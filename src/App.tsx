@@ -7,7 +7,8 @@ import { GamepadListener, gamepadNavigationHandler } from "./gamepad"
 import UserInteractionInitializer from "./features/UserInteractionInitializer"
 import { useCallback, useMemo } from "react"
 import { SpeechRecognitionDisplay } from "./features/voice/SpeechRecognitionDisplay"
-import { TileGroup } from "./features/mosaic/Mosaic"
+import { Tile, TileGroup } from "./features/mosaic/Mosaic"
+import Polygon from "./features/Polygon"
 
 function App() {
   const [videoUrl, setVideoUrl] = useRecoilState(videoUrlState)
@@ -33,6 +34,14 @@ function App() {
     <>
       <nav className="flex flex-col flex-grow gap-8 mb-8 overflow-y-auto">
         <MealPlan />
+        <TileGroup>
+          {Array.from({ length: 100 }, (_, i) => (
+            <Tile onClick={() => {}} key={i}>
+              <Polygon key={i} sides={i + 3} radius={100} />
+              <h2>{i + 3}</h2>
+            </Tile>
+          ))}
+        </TileGroup>
         <FileSystemViewer />
       </nav>
       {videoUrl && (
