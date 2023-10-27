@@ -11,6 +11,7 @@ import { TileGroup } from "./features/mosaic/Mosaic"
 
 function App() {
   const [videoUrl, setVideoUrl] = useRecoilState(videoUrlState)
+
   const onButtonPress = useMemo(
     () =>
       gamepadNavigationHandler(
@@ -33,11 +34,14 @@ function App() {
       <nav className="flex flex-col flex-grow gap-8 mb-8 overflow-y-auto">
         <MealPlan />
         <FileSystemViewer />
-        <TileGroup>
-          <SpeechRecognitionDisplay />
-        </TileGroup>
       </nav>
-      {videoUrl && <VideoPlayer key={videoUrl} videoUrl={videoUrl} />}
+      {videoUrl && (
+        <VideoPlayer
+          key={videoUrl}
+          videoUrl={videoUrl}
+          stop={() => setVideoUrl(null)}
+        />
+      )}
       <GamepadListener onButtonPress={onButtonPress} />
     </>
   )

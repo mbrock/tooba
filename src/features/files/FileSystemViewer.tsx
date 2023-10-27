@@ -13,7 +13,7 @@ function renderFolder(folder: GroupedFolder, level = 0) {
     <div>
       {level > 0 && (
         <header className="flex flex-row items-center gap-4 mb-1 ml-4">
-          <h1 className="font-mono text-2xl font-bold text-gray-300 uppercase">
+          <h1 className="text-2xl font-bold text-gray-300 uppercase">
             {folder.name.replace(/\./g, " ")}
           </h1>
           <span className="text-lg text-gray-500">{folder.files.length}</span>
@@ -50,10 +50,10 @@ export const FileSystemViewer = () => {
     <>
       {!fileSystem ? (
         <button
-          className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+          className="px-4 py-2 mx-auto text-2xl font-bold text-white bg-blue-500 rounded-xl hover:bg-blue-700 w-min"
           onClick={handleOpenFolder}
         >
-          📂 Open Folder
+          START 🥳
         </button>
       ) : (
         <>{renderFolder(fileSystem)}</>

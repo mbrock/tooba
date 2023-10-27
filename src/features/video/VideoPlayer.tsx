@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { atom, useRecoilState } from "recoil"
 
 export const videoUrlState = atom<string | null>({
@@ -13,8 +13,15 @@ export function seek(seconds: number) {
   }
 }
 
-export function VideoPlayer({ videoUrl }: { videoUrl: string }) {
+export function VideoPlayer({
+  videoUrl,
+  stop,
+}: {
+  videoUrl: string
+  stop: () => void
+}) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [inPiP, setInPiP] = useState(false)
 
   const handlePlay = () => {
     if (videoRef.current) {
@@ -22,9 +29,43 @@ export function VideoPlayer({ videoUrl }: { videoUrl: string }) {
     }
   }
 
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (document.fullscreenElement === null && videoRef.current) {
+        videoRef.current.requestPictureInPicture()
+      }
+    }
+
+    const handleEnterPiP = () => {
+      setInPiP(true)
+    }
+
+    const handleLeavePiP = () => {
+      setInPiP(false)
+      stop()
+    }
+
+    const video = videoRef.current
+    if (video) {
+      video.addEventListener("enterpictureinpicture", handleEnterPiP)
+      video.addEventListener("leavepictureinpicture", handleLeavePiP)
+    }
+    document.addEventListener("fullscreenchange", handleFullscreenChange)
+
+    return () => {
+      if (video) {
+        video.removeEventListener("enterpictureinpicture", handleEnterPiP)
+        video.removeEventListener("leavepictureinpicture", handleLeavePiP)
+      }
+      document.removeEventListener("fullscreenchange", handleFullscreenChange)
+    }
+  }, [])
+
   return (
     <video
-      className="w-full border-t-8 border-gray-800 h-1/2"
+      className={`w-full border-t-8 border-gray-800 h-1/2 ${
+        inPiP ? "hidden" : ""
+      }`}
       controls
       src={videoUrl}
       onEnded={() => console.log("ended")}

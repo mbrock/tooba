@@ -12,8 +12,8 @@
 export const TileGroup: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className="flex-shrink-0 overflow-x-auto border-r-8 dark:border-slate-600 rounded-l-xl border-slate-300">
-    <nav className="flex flex-row gap-4 p-2 border-l-8 border-r-8 dark:bg-slate-800 min-w-max dark:border-slate-600 rounded-r-xl bg-slate-300 border-slate-300">
+  <div className="flex-shrink-0 overflow-x-auto">
+    <nav className="flex flex-row gap-4 p-2 dark:bg-black min-w-max bg-slate-300 ">
       {children}
     </nav>
   </div>

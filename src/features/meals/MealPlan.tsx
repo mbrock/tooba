@@ -54,11 +54,11 @@ const Meal = ({ meal, today }: MealProps) => {
 }
 
 export const MealPlan = () => {
-  const today = "Onsdag"
+  const today = "Fredag"
   return (
     <TileGroup>
       {mealPlan.map((meal: Meal) => (
-        <Meal meal={meal} today={meal.Day === today} />
+        <Meal key={meal.Day} meal={meal} today={meal.Day === today} />
       ))}
     </TileGroup>
   )
