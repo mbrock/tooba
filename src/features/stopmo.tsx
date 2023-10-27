@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
-import { atom, useRecoilState } from "recoil";
+import React, { useRef, useState, useEffect } from 'react';
+import { atom, useRecoilState } from 'recoil';
+import { TileGroup, Tile } from './mosaic/Mosaic';
 
 // 🎞️ Recoil Atom: Animation Frames
 const framesState = atom<string[]>({
-  key: "frames",
+  key: 'frames',
   default: [],
 });
 
@@ -24,10 +25,10 @@ const StopMotionCreator: React.FC = () => {
   // 📸 Capture Frame
   const captureFrame = () => {
     if (videoRef.current) {
-      const canvas = document.createElement("canvas");
+      const canvas = document.createElement('canvas');
       canvas.width = videoRef.current.videoWidth;
       canvas.height = videoRef.current.videoHeight;
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext('2d');
       ctx?.drawImage(videoRef.current, 0, 0);
       setFrames([...frames, canvas.toDataURL()]);
     }
@@ -47,18 +48,31 @@ const StopMotionCreator: React.FC = () => {
   }, [isPlaying, frames]);
 
   return (
-    <div>
-      {isPlaying ? (
-        <img src={frames[currentFrame]} alt="Current Frame" />
-      ) : (
-        <video ref={videoRef} autoPlay></video>
-      )}
-      <button onClick={initWebcam}>Initialize Webcam</button>
-      <button onClick={captureFrame}>Capture Frame</button>
-      <button onClick={() => setIsPlaying(!isPlaying)}>
-        {isPlaying ? "Stop" : "Play Animation"}
-      </button>
-    </div>
+    <>
+      <TileGroup>
+        {isPlaying ? (
+          <img src={frames[currentFrame]} alt="Current Frame" className="dark:border-blue-700 border-yellow-500 border-4" />
+        ) : (
+          <video ref={videoRef} autoPlay className="dark:border-blue-700 border-yellow-500 border-4"></video>
+        )}
+        <Tile onClick={initWebcam}>
+          Initialize Webcam
+        </Tile>
+        <Tile onClick={captureFrame}>
+          Capture Frame
+        </Tile>
+        <Tile onClick={() => setIsPlaying((prev) => !prev)}>
+          {isPlaying ? 'Stop' : 'Play Animation'}
+        </Tile>
+      </TileGroup>
+      <TileGroup>
+        {frames.map((frame, index) => (
+          <Tile key={index} onClick={() => setCurrentFrame(index)}>
+            <img src={frame} alt={`Frame ${index}`} className="w-20 h-20 object-cover" />
+          </Tile>
+        ))}
+      </TileGroup>
+    </>
   );
 };
 
