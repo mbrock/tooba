@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
 svtplay-dl -A -S -t --nfo --subfolder "$@"
+./ensure-codecs

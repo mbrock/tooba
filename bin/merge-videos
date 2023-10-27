@@ -7,7 +7,7 @@ find . -type f -name "*.mp4" -exec sh -c '
     audio="$dir/${base}.m4a"
     if [ -f "$audio" ]; then
       echo "Merging: $base"
-      ffmpeg -hide_banner -loglevel panic -i "$video" -i "$audio" -c:v copy -c:a copy -y "$dir/temp_$base.mp4"
+      ffmpeg -hide_banner -loglevel panic -i "$video" -i "$audio" -c:v copy -c:a aac -y "$dir/temp_$base.mp4"
       mv "$dir/temp_$base.mp4" "$video"
       echo "Done: $base"
     fi
