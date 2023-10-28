@@ -29,37 +29,37 @@ export function VideoPlayer({
     }
   }
 
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      if (document.fullscreenElement === null && videoRef.current) {
-        videoRef.current.requestPictureInPicture()
-      }
-    }
+  // useEffect(() => {
+  //   const handleFullscreenChange = () => {
+  //     if (document.fullscreenElement === null && videoRef.current) {
+  //       videoRef.current.requestPictureInPicture()
+  //     }
+  //   }
 
-    const handleEnterPiP = () => {
-      setInPiP(true)
-    }
+  //   const handleEnterPiP = () => {
+  //     setInPiP(true)
+  //   }
 
-    const handleLeavePiP = () => {
-      setInPiP(false)
-      stop()
-    }
+  //   const handleLeavePiP = () => {
+  //     setInPiP(false)
+  //     stop()
+  //   }
 
-    const video = videoRef.current
-    if (video) {
-      video.addEventListener("enterpictureinpicture", handleEnterPiP)
-      video.addEventListener("leavepictureinpicture", handleLeavePiP)
-    }
-    document.addEventListener("fullscreenchange", handleFullscreenChange)
+  //   const video = videoRef.current
+  //   if (video) {
+  //     video.addEventListener("enterpictureinpicture", handleEnterPiP)
+  //     video.addEventListener("leavepictureinpicture", handleLeavePiP)
+  //   }
+  //   document.addEventListener("fullscreenchange", handleFullscreenChange)
 
-    return () => {
-      if (video) {
-        video.removeEventListener("enterpictureinpicture", handleEnterPiP)
-        video.removeEventListener("leavepictureinpicture", handleLeavePiP)
-      }
-      document.removeEventListener("fullscreenchange", handleFullscreenChange)
-    }
-  }, [])
+  //   return () => {
+  //     if (video) {
+  //       video.removeEventListener("enterpictureinpicture", handleEnterPiP)
+  //       video.removeEventListener("leavepictureinpicture", handleLeavePiP)
+  //     }
+  //     document.removeEventListener("fullscreenchange", handleFullscreenChange)
+  //   }
+  // }, [])
 
   return (
     <video
