@@ -5,7 +5,7 @@ import { VideoPlayer, seek, videoUrlState } from "./features/video/VideoPlayer"
 import { MealPlan } from "./features/meals/MealPlan"
 import { GamepadListener, gamepadNavigationHandler } from "./gamepad"
 import UserInteractionInitializer from "./features/UserInteractionInitializer"
-import { useCallback, useMemo } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { SpeechRecognitionDisplay } from "./features/voice/SpeechRecognitionDisplay"
 import { Tile, TileGroup } from "./features/mosaic/Mosaic"
 import Polygon from "./features/Polygon"
@@ -55,6 +55,22 @@ function App() {
       ),
     [setVideoUrl],
   )
+
+  // install a document key handler for the escape button
+  // to stop the video
+  const onKeyUp = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setVideoUrl(null)
+      }
+    },
+    [setVideoUrl],
+  )
+
+  useEffect(() => {
+    document.addEventListener("keyup", onKeyUp)
+    return () => document.removeEventListener("keyup", onKeyUp)
+  })
 
   return (
     <>
