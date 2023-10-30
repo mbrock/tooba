@@ -24,12 +24,14 @@ export const TileGroup: React.FC<{ children: React.ReactNode }> = ({
 export const Tile: React.FC<{
   children: React.ReactNode
   onClick: MouseEventHandler<HTMLElement>
-}> = ({ children, onClick }) => (
+  ref?: React.Ref<HTMLAnchorElement>
+}> = ({ children, onClick, ref }) => (
   <a
     href="#"
     className="flex-shrink-0 gap-4 p-2 bg-transparent opacity-80 rounded-xl focus:dark:bg-slate-700 focus:outline-none focus:ring-2 focus:dark:ring-slate-500 focus:ring-opacity-50 focus:shadow-lg focus:opacity-100 focus:bg-slate-300 focus:ring-blue-500"
     tabIndex={0}
     onClick={onClick}
+    ref={ref}
   >
     {children}
   </a>

@@ -49,6 +49,7 @@ function App() {
     <>
       <nav className="flex flex-col flex-grow gap-8 mb-8 overflow-y-auto">
         <MealPlan />
+        <FileSystemViewer />
         {/* <TileGroup>
           <Tile onClick={(e) => (e.target as HTMLElement).requestFullscreen()}>
             <Plywood />
@@ -64,15 +65,12 @@ function App() {
           ))}
         </TileGroup>
         <StopMotionCreator />
-        <FileSystemViewer />
       </nav>
-      {videoUrl && (
-        <VideoPlayer
-          key={videoUrl}
-          videoUrl={videoUrl}
-          stop={() => setVideoUrl(null)}
-        />
-      )}
+      <VideoPlayer
+        key={videoUrl}
+        videoUrl={videoUrl}
+        stop={() => setVideoUrl(null)}
+      />
       <GamepadListener onButtonPress={onButtonPress} />
     </>
   )

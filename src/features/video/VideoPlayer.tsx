@@ -17,7 +17,7 @@ export function VideoPlayer({
   videoUrl,
   stop,
 }: {
-  videoUrl: string
+  videoUrl: string | null
   stop: () => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -64,11 +64,11 @@ export function VideoPlayer({
   return (
     <video
       className={`w-full border-t-8 border-gray-800 h-1/2 ${
-        inPiP ? "hidden" : ""
+        !videoUrl ? "hidden" : ""
       }`}
       controls
-      src={videoUrl}
-      onEnded={() => console.log("ended")}
+      src={videoUrl || undefined}
+      onEnded={stop}
       onPlay={handlePlay}
       ref={videoRef}
       autoPlay

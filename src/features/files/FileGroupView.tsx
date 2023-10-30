@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 
 import { useFileHandleContent, useObjectUrl } from "../../hooks"
 
@@ -6,6 +6,7 @@ import { FileGroup } from "./fileSystem"
 import { videoUrlState } from "../video/VideoPlayer"
 import { selectorFamily, useRecoilState } from "recoil"
 import { Tile } from "../mosaic/Mosaic"
+import { set } from "idb-keyval"
 
 interface FileGroupRendererProps {
   fileGroup: FileGroup
@@ -63,6 +64,14 @@ const parseNfoXml = (xmlString: string): NfoData => {
   ) as NfoData
 }
 
+function usePreviousValue<T>(value: T): T | null {
+  const ref = React.useRef<T | null>(null)
+  React.useEffect(() => {
+    ref.current = value
+  })
+  return ref.current
+}
+
 const VideoFileGroupView: React.FC<VideoFileGroupProps> = ({
   videoFile: mp4File,
   thumbnailFile: tbnFile,
@@ -71,15 +80,35 @@ const VideoFileGroupView: React.FC<VideoFileGroupProps> = ({
   const thumbnailUrl = useObjectUrl(tbnFile)
 
   const [videoObjectUrl, setMp4ObjectUrl] = useState<string | null>(null)
-  const [, setVideoUrl] = useRecoilState(videoUrlState)
+  const [videoUrl, setVideoUrl] = useRecoilState(videoUrlState)
+  const tileRef = useRef<HTMLDivElement>(null)
 
-  const handleClick = async () => {
+  // let's kludge a way to make focus come back to this tile when the video is
+  // closed... for now we'll just check the videoUrl, when it changes to null
+  // we'll focus this tile if we were playing
+
+  const previousVideoUrl = usePreviousValue(videoUrl)
+  const [wasPlaying, setWasPlaying] = useState(false)
+
+  useEffect(() => {
+    if (previousVideoUrl && !videoUrl && wasPlaying) {
+      // find the parent of tileRef that has a tabindex
+      const parent = tileRef.current?.closest("[tabindex]")
+      if (parent) {
+        ;(parent as HTMLElement).focus()
+      }
+      setWasPlaying(false)
+    }
+  }, [previousVideoUrl, videoUrl, wasPlaying])
+
+  const handleClick = useCallback(async () => {
     if (!videoObjectUrl) {
       const url = URL.createObjectURL(await mp4File.getFile())
       setMp4ObjectUrl(url)
       setVideoUrl(url)
+      setWasPlaying(true)
     }
-  }
+  }, [mp4File, setMp4ObjectUrl, setVideoUrl, videoObjectUrl])
 
   const ImageThumbnail = ({ url }: { url: string | null }) => {
     if (!url) return null
@@ -155,7 +184,7 @@ const VideoFileGroupView: React.FC<VideoFileGroupProps> = ({
 
   return (
     <Tile onClick={handleClick}>
-      <div className="flex flex-col gap-1 w-96">
+      <div className="flex flex-col gap-1 w-96" ref={tileRef}>
         <OptionalField
           data={thumbnailUrl}
           render={(url) => (
