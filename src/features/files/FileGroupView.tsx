@@ -147,7 +147,7 @@ const VideoFileGroupView: React.FC<VideoFileGroupProps> = ({
     if (!date) return null
     const dateObj = new Date(date)
     return (
-      <p className="text-gray-500  dark:text-gray-400">
+      <p className="text-gray-500 dark:text-gray-400">
         {formatDateToSwedish(dateObj)}
       </p>
     )
