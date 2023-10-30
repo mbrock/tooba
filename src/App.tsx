@@ -81,7 +81,7 @@ function App() {
             <Plywood />
           </Tile>
         </TileGroup> */}
-        <FileSystemViewer />
+        
         <TileGroup>
           {Array.from({ length: 100 }, (_, i) => (
             <Tile onClick={() => {}} key={i}>
@@ -106,3 +106,45 @@ function App() {
 }
 
 export default App
+
+// So, this is a bit of a mess. I'm not sure how to make it better.
+//
+// I think something like Datalog might be a good fit for the data
+// management, but I'm not sure how to make it work with React.
+//
+// I think the best thing to do is to start with the simplest thing that
+// could possibly work, and then refactor it as I go.
+//
+// I think the simplest thing that could possibly work is to use a
+// single global state atom, and then use selectors to derive the
+// state for each component.
+//
+// The global state should be a set of facts, and the selectors should
+// be thought of as queries.
+//
+// The facts can be persisted to IndexedDB, and the queries can be
+// memoized.
+//
+// The queries can be used to render the components, and the components
+// can dispatch actions to the global state.
+//
+// The actions can be thought of as mutations, and they can be
+// implemented as transactions.
+//
+// The transactions can be persisted to IndexedDB.
+//
+// The transactions can be used to update the facts, and the facts can
+// be used to update the queries.
+//
+// For example, our library of videos can be represented as a set of
+// facts, here in Turtle with widely-used prefixes:
+//
+// @prefix : <#> .
+// @prefix dc: <http://purl.org/dc/elements/1.1/>
+// @prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+//
+// :video-1 dc:title "Video 1" .
+// :video-1 dc:source "https://example.com/video-1.mp4" .
+// :video-1 dc:duration "PT1M"^^xsd:duration .
+//
+//2a,2    a

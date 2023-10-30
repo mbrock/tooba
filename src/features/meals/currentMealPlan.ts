@@ -3,7 +3,111 @@ import wednesdayImgUrl from "./img/Pumpkin and Chickpea Curry + Quinoa Side.png"
 import thursdayImgUrl from "./img/Quinoa Salad with Hazelnuts, Balsamic Vinegar, and Grilled Chicken.png"
 import fridayImgUrl from "./img/Beet and Black Bean Burgers with Cabbage Slaw.png"
 
-export default [
+import w2d1 from "./img/Taco Natt.png"
+import w2d2 from "./img/Omelett + Halloween.png"
+import w2d3 from "./img/Pumpa Soppa + Rostat Bröd.png"
+import w2d4 from "./img/Biff + Potatis.png"
+import w2d5 from "./img/Mättande Soppa.png"
+export interface Dish {
+  Name: string
+  Steps: string[]
+}
+
+export interface Meal {
+  Day: string
+  Meal: string
+  Dishes: Dish[]
+}
+
+export const week2 = [
+  {
+    "Day": "Måndag",
+    "Meal": "Taco Natt",
+    "Image": w2d1,
+    "Dishes": [
+      {
+        "Name": "Ground Beef",
+        "Steps": ["Sauté ground beef with salt, pepper"]
+      },
+      {
+        "Name": "Tortillas",
+        "Steps": ["Warm tortillas"]
+      },
+      {
+        "Name": "Sides",
+        "Steps": [
+          "Slice 1 bell pepper",
+          "Slice 1 cucumber",
+          "Prepare Greek yogurt and BBQ sauce for dip",
+          "Grate cheese"
+        ]
+      }
+    ]
+  },
+  {
+    "Day": "Tisdag",
+    "Meal": "Omelett + Halloween",
+    "Image": w2d2,
+    "Dishes": [
+      {
+        "Name": "Omelette",
+        "Steps": [
+          "Whisk 4 eggs",
+          "Pour into hot pan, cook until done",
+          "Top with sauerkraut and cheese"
+        ]
+      },
+      {
+        "Name": "Halloween",
+        "Steps": [
+          "Carve small pumpkin",
+          "Use insides in omelette or as snack"
+        ]
+      }
+    ]
+  },
+  {
+    "Day": "Onsdag",
+    "Meal": "Pumpa Soppa + Rostat Bröd",
+    "Image": w2d3,
+    "Dishes": [
+      {
+        "Name": "Pumpkin Soup",
+        "Steps": [
+          "Sauté 1 chopped onion",
+          "Add ~4 cups diced pumpkin",
+          "Add 1 liter vegetable broth",
+          "Cook until soft, blend, season"
+        ]
+      },
+      {
+        "Name": "Toast",
+        "Steps": ["Toast bread", "Spread with Greek yogurt"]
+      }
+    ]
+  },
+
+  {
+    "Day": "Fredag",
+    "Meal": "Mättande Soppa",
+    "Image": w2d5,
+    "Dishes": [
+      {
+        "Name": "Hearty Soup",
+        "Steps": [
+          "Sauté 1 chopped onion",
+          "Add diced 1 carrot, 1 potato, 1 bell pepper",
+          "Add 1 liter vegetable broth and 1 bottle (~330ml) Guinness",
+          "Add 2 cups pasta, 1 cup kidney beans",
+          "Cook until done"
+        ]
+      }
+    ]
+  }
+]
+
+
+export const week1 = [
   {
     Day: "Tisdag",
     Meal: "Pasta + Pesto + Brysselkål",
