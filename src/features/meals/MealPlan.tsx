@@ -1,5 +1,5 @@
 import { Tile, TileGroup } from "../mosaic/Mosaic"
-import mealPlan from "./currentMealPlan"
+import { week2 } from "./currentMealPlan"
 
 type Dish = {
   Name: string
@@ -9,7 +9,7 @@ type Dish = {
 type Meal = {
   Day: string
   Meal: string
-  Image: string
+  Image?: string
   Dishes: Dish[]
 }
 
@@ -54,10 +54,10 @@ const Meal = ({ meal, today }: MealProps) => {
 }
 
 export const MealPlan = () => {
-  const today = "Fredag"
+  const today = "Måndag"
   return (
     <TileGroup>
-      {mealPlan.map((meal: Meal) => (
+      {week2.map((meal: Meal) => (
         <Meal key={meal.Day} meal={meal} today={meal.Day === today} />
       ))}
     </TileGroup>

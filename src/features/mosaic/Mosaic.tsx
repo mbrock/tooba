@@ -9,6 +9,8 @@
 // The <Mosaic> component will take a content tree as a prop and render it. The
 // content tree will be a nested structure of <TileGroup> and <Tile> components.
 
+import { MouseEventHandler } from "react"
+
 export const TileGroup: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
@@ -21,7 +23,7 @@ export const TileGroup: React.FC<{ children: React.ReactNode }> = ({
 
 export const Tile: React.FC<{
   children: React.ReactNode
-  onClick: () => void
+  onClick: MouseEventHandler<HTMLElement>
 }> = ({ children, onClick }) => (
   <a
     href="#"

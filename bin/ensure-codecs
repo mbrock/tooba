@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Loop through all MP4 files recursively
+for input_file in $(find . -type f -name '*.mp4'); do
+  echo "$input_file"
+  temp_file="${input_file}.tmp.mp4"
+
+  # Check if audio is AAC
+  audio_check=$(ffmpeg -i "$input_file" 2>&1 | grep "Audio: aac")
+
+  # Conditionally re-encode
+  if [ -z "$audio_check" ]; then
+    ffmpeg -i "$input_file" -c:v copy -c:a aac "$temp_file"
+    mv "$temp_file" "$input_file"
+    echo "Converted $input_file"
+  else
+    echo "Audio in $input_file is already AAC. No conversion needed."
+  fi
+done
