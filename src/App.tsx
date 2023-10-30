@@ -4,37 +4,10 @@ import { FileSystemViewer } from "./features/files/FileSystemViewer"
 import { VideoPlayer, seek, videoUrlState } from "./features/video/VideoPlayer"
 import { MealPlan } from "./features/meals/MealPlan"
 import { GamepadListener, gamepadNavigationHandler } from "./gamepad"
-import UserInteractionInitializer from "./features/UserInteractionInitializer"
 import { useCallback, useEffect, useMemo } from "react"
-import { SpeechRecognitionDisplay } from "./features/voice/SpeechRecognitionDisplay"
 import { Tile, TileGroup } from "./features/mosaic/Mosaic"
 import Polygon from "./features/Polygon"
-import PanelLayout from "./features/plywood"
 import StopMotionCreator from "./features/stopmo"
-
-const Plywood: React.FC = () => {
-  const panel: [number, number] = [1250, 2500]
-  const cuts: [number, number][] = [
-    [460, 1071.5], // Side pieces
-    [460, 1071.5], // Side pieces
-    [658, 1071.5], // Back piece
-    [658, 460], // Top piece
-    [658, 460], // Bottom piece
-  ]
-  const numUnits = 1
-  const kerfWidth = 3
-
-  return (
-    <div>
-      <PanelLayout
-        panel={panel}
-        cuts={cuts}
-        numUnits={numUnits}
-        kerfWidth={kerfWidth}
-      />
-    </div>
-  )
-}
 
 function App() {
   const [videoUrl, setVideoUrl] = useRecoilState(videoUrlState)
@@ -81,7 +54,7 @@ function App() {
             <Plywood />
           </Tile>
         </TileGroup> */}
-        
+
         <TileGroup>
           {Array.from({ length: 100 }, (_, i) => (
             <Tile onClick={() => {}} key={i}>

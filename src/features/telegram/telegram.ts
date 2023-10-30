@@ -1,11 +1,21 @@
-import { openDB } from "https://cdn.jsdelivr.net/npm/idb@7/+esm"
+import { openDB, IDBPDatabase } from "idb"
 
 const TELEGRAM_API_URL = "https://api.telegram.org/bot"
 const TELEGRAM_FILE_API_URL = "https://api.telegram.org/file/bot"
 const CORS_PROXY_URL = "https://telegram-cors-proxy.herokuapp.com"
 
-export function telegramUpdateIterator(botToken, loadFromDB = true) {
-  let db
+interface Update {
+  update_id: string
+  [key: string]: any
+}
+
+interface FetchResult<T> {
+  ok: boolean
+  result: T
+}
+
+export function telegramUpdateIterator(botToken: string, loadFromDB = true) {
+  let db: IDBPDatabase
 
   const initDB = async () => {
     db = await openDB("telegram", 1, {
@@ -17,14 +27,14 @@ export function telegramUpdateIterator(botToken, loadFromDB = true) {
     })
   }
 
-  const getLastUpdateId = async () => {
+  const getLastUpdateId = async (): Promise<string> => {
     const telegramStore = db.transaction("telegram").objectStore("telegram")
     const range = IDBKeyRange.bound([botToken], [botToken, ""])
     const cursor = await telegramStore.openCursor(range, "prev")
     return cursor ? cursor.value.update_id : "0"
   }
 
-  const storeUpdates = async (updates) => {
+  const storeUpdates = async (updates: Update[]) => {
     const transaction = db.transaction("telegram", "readwrite")
     const telegramStore = transaction.objectStore("telegram")
 
@@ -35,20 +45,20 @@ export function telegramUpdateIterator(botToken, loadFromDB = true) {
 
   const getAndStoreUpdates = async () => {
     const lastUpdateId = await getLastUpdateId()
-    const updates = await fetchFromTelegramAPI(botToken, "getUpdates", {
-      offset: Number(lastUpdateId) + 1,
-      timeout: 60,
-    })
+    const updates = await fetchFromTelegramAPI<Update[]>(
+      botToken,
+      "getUpdates",
+      {
+        offset: Number(lastUpdateId) + 1,
+        timeout: 60,
+      },
+    )
 
-    if (!updates.ok) {
-      throw new Error("telegram API error")
+    if (updates.length > 0) {
+      await storeUpdates(updates)
     }
 
-    if (updates.result.length > 0) {
-      await storeUpdates(updates.result)
-    }
-
-    return updates.result
+    return updates
   }
 
   const iterator = {
@@ -59,7 +69,7 @@ export function telegramUpdateIterator(botToken, loadFromDB = true) {
         const transaction = db.transaction("telegram")
         const store = transaction.objectStore("telegram")
         let cursor = await store.openCursor()
-        const updates = []
+        const updates: Update[] = []
 
         while (cursor) {
           if (cursor.value.botToken === botToken) {
@@ -85,13 +95,22 @@ export function telegramUpdateIterator(botToken, loadFromDB = true) {
   return iterator
 }
 
-async function fetchFromTelegramAPI(botToken, method, params) {
+async function fetchFromTelegramAPI<T>(
+  botToken: string,
+  method: string,
+  params: any,
+): Promise<T> {
   const queryParams = new URLSearchParams(params).toString()
   const apiUrl = `${TELEGRAM_API_URL}${botToken}/${method}?${queryParams}`
-  return await fetchJson(apiUrl)
+  const { ok, result } = await fetchJson<FetchResult<T>>(apiUrl)
+  if (!ok) {
+    throw new Error("telegram API error")
+  } else {
+    return result
+  }
 }
 
-async function fetchJson(path) {
+async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(path)
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`)
@@ -99,17 +118,15 @@ async function fetchJson(path) {
   return response.json()
 }
 
-export async function downloadTelegramFile(botToken, file_id) {
-  const {
-    ok,
-    result: { file_path },
-  } = await fetchFromTelegramAPI(botToken, "getFile", {
-    file_id,
-  })
-
-  if (!ok) {
-    throw new Error("telegram API error")
-  }
+export async function downloadTelegramFile(
+  botToken: string,
+  file_id: string,
+): Promise<Blob> {
+  const { file_path } = await fetchFromTelegramAPI<{ file_path: string }>(
+    botToken,
+    "getFile",
+    { file_id },
+  )
 
   const response = await fetch(
     `${CORS_PROXY_URL}/${TELEGRAM_FILE_API_URL}${botToken}/${file_path}`,

@@ -79,3 +79,27 @@ const PanelLayout: React.FC<PanelProps> = ({
 }
 
 export default PanelLayout
+
+export const TestPlywood: React.FC = () => {
+  const panel: [number, number] = [1250, 2500]
+  const cuts: [number, number][] = [
+    [460, 1071.5], // Side pieces
+    [460, 1071.5], // Side pieces
+    [658, 1071.5], // Back piece
+    [658, 460], // Top piece
+    [658, 460], // Bottom piece
+  ]
+  const numUnits = 1
+  const kerfWidth = 3
+
+  return (
+    <div>
+      <PanelLayout
+        panel={panel}
+        cuts={cuts}
+        numUnits={numUnits}
+        kerfWidth={kerfWidth}
+      />
+    </div>
+  )
+}
