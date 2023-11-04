@@ -11,6 +11,9 @@ export const GamepadListener: React.FC<GamepadListenerProps> = ({
   const exitFlag = useRef(false)
 
   useEffect(() => {
+    const repeatInterval = 200 // Repeat every 200ms
+    const firstPressTime = useRef<number[]>([])
+
     const checkGamepadButtons = () => {
       if (exitFlag.current) return
       const gamepad = navigator.getGamepads()[0]
@@ -19,8 +22,17 @@ export const GamepadListener: React.FC<GamepadListenerProps> = ({
           const isPressed = button.pressed
           const wasPressed = prevButtonStates.current[index] || false
 
-          if (isPressed && !wasPressed) {
-            onButtonPress(gamepad, index)
+          if (isPressed) {
+            const now = Date.now()
+            if (
+              !wasPressed ||
+              now - firstPressTime.current[index] >= repeatInterval
+            ) {
+              onButtonPress(gamepad, index)
+              firstPressTime.current[index] = now
+            }
+          } else {
+            firstPressTime.current[index] = 0
           }
 
           prevButtonStates.current[index] = isPressed
@@ -35,7 +47,6 @@ export const GamepadListener: React.FC<GamepadListenerProps> = ({
 
     return () => {
       // Set exit flag for cleanup
-      // exitFlag.current = true;
       console.log("exitFlag.current")
     }
   }, [onButtonPress])
