@@ -9,10 +9,10 @@ export const GamepadListener: React.FC<GamepadListenerProps> = ({
 }) => {
   const prevButtonStates = useRef<boolean[]>([])
   const exitFlag = useRef(false)
+  const firstPressTime = useRef<number[]>([])
 
   useEffect(() => {
     const repeatInterval = 200 // Repeat every 200ms
-    const firstPressTime = useRef<number[]>([])
 
     const checkGamepadButtons = () => {
       if (exitFlag.current) return

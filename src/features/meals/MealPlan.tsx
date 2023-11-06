@@ -1,5 +1,5 @@
 import { Tile, TileGroup } from "../mosaic/Mosaic"
-import { week2 } from "./currentMealPlan"
+import { week3 } from "./currentMealPlan"
 
 type Dish = {
   Name: string
@@ -54,11 +54,16 @@ const Meal = ({ meal, today }: MealProps) => {
 }
 
 export const MealPlan = () => {
-  const today = "Måndag"
+  // const today = "Måndag"
+  const today = new Date().toLocaleDateString("sv-SE", { weekday: "long" })
   return (
     <TileGroup>
-      {week2.map((meal: Meal) => (
-        <Meal key={meal.Day} meal={meal} today={meal.Day === today} />
+      {week3.map((meal: Meal) => (
+        <Meal
+          key={meal.Day}
+          meal={meal}
+          today={meal.Day.toLowerCase() === today}
+        />
       ))}
     </TileGroup>
   )
